@@ -1,43 +1,61 @@
 ## Final Poject Proposal
 
-### Summery
+### Summary
 
-Summery of all the latter section
+Summary of all the latter sections
 
 ### Background
 
+As nowadays the video consumers are becoming ubiquitous online, so is the need for a fast video analysis framework. The recent advances in machine learning methods enables many possibilities in this new area. Recent research by CMU on the [Scanner project](https://github.com/scanner-research/scanner) provides such a framework implemented using (ASK HERE)
+
+[TensorFlow](https://www.tensorflow.org/) is a open-source machine learning library which provides APIs in a lot of languages including Python, C++ and Go. The design and implementation of TensorFlow is similar to those of Scanner, which enables the possibliity of implementing Scanner on top of TensorFlow.
+
+To implement Scanner on top of TensorFlow would ... (ASK HERE)
+
+
+(
 1. Description our problem in real life
 2. What has already been done?
 3. What exactly is the problem we gonna solve?
 
 To demonstrate that our problem is meaningful
+)
 
 ### Challenges
 
-What is the challenges?
+What are the challenges?
 
 To demonstrate that the problem is not easy
 
-
 ### Resources
 
-What is the existing resources we can reference to?
+On the Scanner side of this project, the documentations and open-source code are listed online for our reference. The paper is provided to us to read, and as CMU students, we both can ask for help from the author of Scanner.
+
+On the TensorFlow side, the documentation online is very helpful. Also, as a popular open-source framework, third-party online information related to TensorFlow about it is plentiful.
+
+(
+What are the existing resources we can reference to?
 Where are the helps?
 
 To demonstrate the feasibility
+)
 
 ### Deliverable
 
-What we must achieve?
+(
+What must we achieve?
 
 If we have more time, what more we can do?
 
 What will our final presentation be like?
 What will be our final product?
+)
 
 ### Schedule
 
+(
 Schedule by week
+)
 
 ### References
 
