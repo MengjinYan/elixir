@@ -1,4 +1,54 @@
-## Welcome to GitHub Pages
+## Final Poject Proposal
+
+### Summery
+
+Summery of all the latter section
+
+### Background
+
+1. Description our problem in real life
+2. What has already been done?
+3. What exactly is the problem we gonna solve?
+
+To demonstrate that our problem is meaningful
+
+### Challenges
+
+What is the challenges?
+
+To demonstrate that the problem is not easy
+
+
+### Resources
+
+What is the existing resources we can reference to?
+Where are the helps?
+
+To demonstrate the feasibility
+
+### Deliverable
+
+What we must achieve?
+
+If we have more time, what more we can do?
+
+What will our final presentation be like?
+What will be our final product?
+
+### Schedule
+
+Schedule by week
+
+### References
+
+
+
+
+
+
+
+
+
 
 You can use the [editor on GitHub](https://github.com/MengjinYan/parallel-final-project/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
 
