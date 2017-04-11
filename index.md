@@ -49,6 +49,12 @@ To evaluate Elixir, we will do a evaluation of the performance of several applic
 
 If we are ahead of schedule, we will implement a simliar application on top of TensorFlow or Spark, and benchmark our implementation against that one.
 
+### Platform
+
+We will run our code on top of the platform on which Scanner is implemented. During the process, we plan to do our development and evaluation on the AWS platform.
+
+It makes much sense to implement such a project on top of platforms which have hetrogeneous hardware including multiple CPU or CPU cores and high-end GPU(s).
+
 ### Schedule
 
 |   Time    | Work before this timestamp |
