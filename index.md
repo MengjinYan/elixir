@@ -1,21 +1,20 @@
-# Elixir: a fast video processing scheduler on hetrogeneous hardware
-## Final Poject Proposal
+## Final Project Proposal
 
 ### Summary
 
-We are going to implement a work scheduler on top of hetrogeneous platforms with CPUs and GPUs. This scheduler will be integrated into [Scanner](https://github.com/scanner-research/scanner)[^1], a video analysis framework.
+We are going to implement a work scheduler library on top of hetrogeneous platforms with CPUs and GPUs. This scheduler will be integrated into [Scanner](https://github.com/scanner-research/scanner)[[^1]], a video analysis framework.
 
 ### Background
 
-As nowadays the video consumers are becoming ubiquitous online, so is the need for a fast video analysis framework. The recent advances in machine learning methods enables many possibilities in this new area. Recent research by CMU on the [Scanner project](https://github.com/scanner-research/scanner)[^1] provides such a framework implemented using C++.
+As nowadays the video consumers are becoming ubiquitous online, so is the need for a fast video analysis framework. The recent advances in machine learning methods enables many possibilities in this new area. Recent research by CMU on the [Scanner project](https://github.com/scanner-research/scanner)[[^1]] provides such a framework implemented using C++.
 
-[TensorFlow](https://www.tensorflow.org/)[^2] is a open-source machine learning library which provides APIs in a lot of languages including Python, C++ and Go. The design and implementation of TensorFlow is similar to those of Scanner, and TensorFlow provides a much more complex work scheduler than that in Scanner, which enables the possibliity of implementing Scanner on top of Tensorflow.
+[TensorFlow](https://www.tensorflow.org/)[[^2]] is a open-source machine learning library which provides APIs in a lot of languages including Python, C++ and Go. The design and implementation of TensorFlow is similar to those of Scanner, and TensorFlow provides a much more complex work scheduler than that in Scanner, which enables the possibliity of implementing Scanner on top of Tensorflow.
 
 Nevertheless, implementing Scanner as a whole on top of TensorFlow would require a lot of work and might introduce overhead from TensorFlow. Thus we plan to write a new lightweight work scheduler for Scanner. We plan to utilize the properties of the workload dependency DAGs and hetrogeneous hardware platforms to speedup the work on different video analysis applications implemented on top of Scanner, and improve the performance of the current work scheduler on Scanner.
 
 ### Challenges
 
-The basic work scheduler is to take a pipeline specification of functions with different resource requirements such as CPU and GPU, and map the down to a machine with differnt CPUs and GPUs. This would introduce the following challenges:
+The basic goal of Elixir is to take a pipeline specification of functions with different resource requirements such as CPU and GPU, and map the down to a machine with differnt CPUs and GPUs. This would introduce the following challenges:
 
 1. Algorithms: one of the most important challenges we need to solve is to exploit the properties of the given DAG, to find out which parts of the workload pipeline is parallelizable.
 2. Domain specific characteristics: we plan to optimize our scheduler for video analysis workflows, and it is difficult to and analyze some typical video analysis and extract some common key characteristics of the pipeline.
@@ -25,10 +24,9 @@ The basic work scheduler is to take a pipeline specification of functions with d
 ### Resources
 
 1. On the Scanner side of this project, the documentations and open-source code are listed online for our reference. The paper is provided to us to read, and as CMU students, we both can ask for help from the author of Scanner.
-2. For the algorithms of the scheduler, since TensorFlow[^2] and Spark[^3] are popular open-source frameworks, third-party online information related to TensorFlow about it is plentiful. We can refer to the design of schedulers in both Spark and TensorFlow and introduce the key ideas into our implementation.
+2. For the algorithms of the scheduler, since TensorFlow[[^2]] and Spark[[^3]] are popular open-source frameworks, third-party online information related to TensorFlow about it is plentiful. We can refer to the design of schedulers in both Spark and TensorFlow and introduce the key ideas into our implementation.
 
 ### Goals and Deliverables
-
 
 #### Plan to achieve
 
@@ -47,7 +45,7 @@ The following tasks are those that we hope to achieve, if we are ahead of schedu
 
 #### Evaluation
 
-To evaluate our implemetation, we will do a evaluation of the performance of several applications running on our scheduler and that in the original Scanner scheduler. We will provide graphs and charts for the speedup results.
+To evaluate Elixir, we will do a evaluation of the performance of several applications running on our scheduler and that in the original Scanner scheduler. We will provide graphs and charts for the speedup results.
 
 If we are ahead of schedule, we will implement a simliar application on top of TensorFlow or Spark, and benchmark our implementation against that one.
 
@@ -59,7 +57,7 @@ If we are ahead of schedule, we will implement a simliar application on top of T
 | 4/13:     |Investigate Scanner codebase and collect video analysis applications. |
 | 4/16:     |Implement a benchmark baseline, make decisions on how to insert our code into Scanner (as a code modification or as a set of interfaces), investigate the workload of different applications and pipelines. |
 | 4/22:     |Basic design of the algorithms and scheduling policies are done. |
-| 4/25:     |First version of the scheduler implementation is done. Benchmark against the original Scanner. Checkpoint Report. |
+| 4/25:     |First version of the Elixir scheduler implementation is done. Benchmark against the original Scanner. Checkpoint Report. |
 | 5/1:      |Different types of heuristics based optimizations are performed on the scheduler. |
 | 5/7:      |The best results is achieved: all optimizations we can think of are performed, and the current implementation is the best we can deliver. |
 | 5/12:     |Documentation and Tutorials are done. Benchmarking and evaluations. Final Report. |
