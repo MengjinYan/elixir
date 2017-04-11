@@ -1,3 +1,4 @@
+# Elixir: a fast video processing scheduler on hetrogeneous hardware
 ## Final Poject Proposal
 
 ### Summary
