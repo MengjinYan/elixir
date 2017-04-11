@@ -2,104 +2,76 @@
 
 ### Summary
 
-Summary of all the latter sections
+We are going to implement a work scheduler on top of hetrogeneous platforms with CPUs and GPUs. This scheduler will be integrated into [Scanner](https://github.com/scanner-research/scanner)[^1], a video analysis framework.
 
 ### Background
 
-As nowadays the video consumers are becoming ubiquitous online, so is the need for a fast video analysis framework. The recent advances in machine learning methods enables many possibilities in this new area. Recent research by CMU on the [Scanner project](https://github.com/scanner-research/scanner) provides such a framework implemented using (ASK HERE)
+As nowadays the video consumers are becoming ubiquitous online, so is the need for a fast video analysis framework. The recent advances in machine learning methods enables many possibilities in this new area. Recent research by CMU on the [Scanner project](https://github.com/scanner-research/scanner)[^1] provides such a framework implemented using C++.
 
-[TensorFlow](https://www.tensorflow.org/) is a open-source machine learning library which provides APIs in a lot of languages including Python, C++ and Go. The design and implementation of TensorFlow is similar to those of Scanner, which enables the possibliity of implementing Scanner on top of TensorFlow.
+[TensorFlow](https://www.tensorflow.org/)[^2] is a open-source machine learning library which provides APIs in a lot of languages including Python, C++ and Go. The design and implementation of TensorFlow is similar to those of Scanner, and TensorFlow provides a much more complex work scheduler than that in Scanner, which enables the possibliity of implementing Scanner on top of Tensorflow.
 
-To implement Scanner on top of TensorFlow would ... (ASK HERE)
-
-
-(
-1. Description our problem in real life
-2. What has already been done?
-3. What exactly is the problem we gonna solve?
-
-To demonstrate that our problem is meaningful
-)
+Nevertheless, implementing Scanner as a whole on top of TensorFlow would require a lot of work and might introduce overhead from TensorFlow. Thus we plan to write a new lightweight work scheduler for Scanner. We plan to utilize the properties of the workload dependency DAGs and hetrogeneous hardware platforms to speedup the work on different video analysis applications implemented on top of Scanner, and improve the performance of the current work scheduler on Scanner.
 
 ### Challenges
 
-What are the challenges?
+The basic work scheduler is to take a pipeline specification of functions with different resource requirements such as CPU and GPU, and map the down to a machine with differnt CPUs and GPUs. This would introduce the following challenges:
 
-To demonstrate that the problem is not easy
+1. Algorithms: one of the most important challenges we need to solve is to exploit the properties of the given DAG, to find out which parts of the workload pipeline is parallelizable.
+2. Domain specific characteristics: we plan to optimize our scheduler for video analysis workflows, and it is difficult to and analyze some typical video analysis and extract some common key characteristics of the pipeline.
+3. Stability: the workload is dynamic, and to predict and estimate the execution time of a specific piece of work is hard.
+4. Resources: currently, there are not so many Scanner applications we can use to get the pipelines from.
 
 ### Resources
 
-On the Scanner side of this project, the documentations and open-source code are listed online for our reference. The paper is provided to us to read, and as CMU students, we both can ask for help from the author of Scanner.
+1. On the Scanner side of this project, the documentations and open-source code are listed online for our reference. The paper is provided to us to read, and as CMU students, we both can ask for help from the author of Scanner.
+2. For the algorithms of the scheduler, since TensorFlow[^2] and Spark[^3] are popular open-source frameworks, third-party online information related to TensorFlow about it is plentiful. We can refer to the design of schedulers in both Spark and TensorFlow and introduce the key ideas into our implementation.
 
-On the TensorFlow side, the documentation online is very helpful. Also, as a popular open-source framework, third-party online information related to TensorFlow about it is plentiful.
+### Goals and Deliverables
 
-(
-What are the existing resources we can reference to?
-Where are the helps?
 
-To demonstrate the feasibility
-)
+#### Plan to achieve
 
-### Deliverable
+The most important goal is to implement a working, fast work scheduler for Scanner. This would include:
 
-(
-What must we achieve?
+1. The evaluation of the performance applications using the original Scanner scheduler as a baseline.
+2. The scheduling algorithm. This is the core of our project.
 
-If we have more time, what more we can do?
+#### Hope to achieve
 
-What will our final presentation be like?
-What will be our final product?
-)
+The following tasks are those that we hope to achieve, if we are ahead of schedule.
+
+1. Provide a set of interfaces for our scheduler, generalize it as a third-party library with a well-defined set of APIs.
+2. A demo of running a real-time video analysis task if it is feasible.
+3. Generalize and optimize our algorithm for different workflows other than those a video analysis application.
+
+#### Evaluation
+
+To evaluate our implemetation, we will do a evaluation of the performance of several applications running on our scheduler and that in the original Scanner scheduler. We will provide graphs and charts for the speedup results.
+
+If we are ahead of schedule, we will implement a simliar application on top of TensorFlow or Spark, and benchmark our implementation against that one.
 
 ### Schedule
 
-(
-Schedule by week
-)
+|   Time    | Work before this timestamp |
+|:---------:|:-------------------        |
+| 4/10:     |Project Proposal |
+| 4/13:     |Investigate Scanner codebase and collect video analysis applications. |
+| 4/16:     |Implement a benchmark baseline, make decisions on how to insert our code into Scanner (as a code modification or as a set of interfaces), investigate the workload of different applications and pipelines. |
+| 4/22:     |Basic design of the algorithms and scheduling policies are done. |
+| 4/25:     |First version of the scheduler implementation is done. Benchmark against the original Scanner. Checkpoint Report. |
+| 5/1:      |Different types of heuristics based optimizations are performed on the scheduler. |
+| 5/7:      |The best results is achieved: all optimizations we can think of are performed, and the current implementation is the best we can deliver. |
+| 5/12:     |Documentation and Tutorials are done. Benchmarking and evaluations. Final Report. |
+
+ After 5/12 (What we hope to achieve, or before 5/12 if we finished everything earlier):
+
+ - Application implementation on TensorFlow or Spark, benchmarking against our scheduler.
+ - Real-time video analysis using a simple application such as face detection.
 
 ### References
 
+[^1]: [The Scanner Project](https://github.com/scanner-research/scanner)
 
+[^2]: Abadi, Martín, et al. "TensorFlow: A system for large-scale machine learning." Proceedings of the 12th USENIX Symposium on Operating Systems Design and Implementation (OSDI). Savannah, Georgia, USA. 2016.
 
-
-
-
-
-
-
-
-You can use the [editor on GitHub](https://github.com/MengjinYan/parallel-final-project/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/MengjinYan/parallel-final-project/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+[^3]: Zaharia, Matei, et al. "Spark: Cluster Computing with Working Sets." HotCloud 10.10-10 (2010): 95.
