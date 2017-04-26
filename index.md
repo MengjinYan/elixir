@@ -1,4 +1,6 @@
-## Final Project Proposal
+## Project Proposal
+
+[Midpoint Report](https://mengjinyan.github.io/elixir/midpoint)
 
 ### Summary
 
@@ -57,16 +59,19 @@ It makes much sense to implement such a project on top of platforms which have h
 
 ### Schedule
 
-|   Time    | Work before this timestamp |
-|:---------:|:-------------------        |
-| 4/10:     |Project Proposal |
-| 4/13:     |Investigate Scanner codebase and collect video analysis applications. |
-| 4/16:     |Implement a benchmark baseline, make decisions on how to insert our code into Scanner (as a code modification or as a set of interfaces), investigate the workload of different applications and pipelines. |
-| 4/22:     |Basic design of the algorithms and scheduling policies are done. |
-| 4/25:     |First version of the Elixir scheduler implementation is done. Benchmark against the original Scanner. Checkpoint Report. |
-| 5/1:      |Different types of heuristics based optimizations are performed on the scheduler. |
-| 5/7:      |The best results is achieved: all optimizations we can think of are performed, and the current implementation is the best we can deliver. |
-| 5/12:     |Documentation and Tutorials are done. Benchmarking and evaluations. Final Report. |
+| Time        | Work before this timestamp                                                                                               |
+| :---------: | :-------------------                                                                                                     |
+| 4/10        | Project Proposal (DONE)                                                                                                  |
+| 4/13        | Investigate Scanner codebase and collect video analysis applications. (DONE)                                             |
+| 4/25        | Basic design of the algorithms and scheduling policies are done. (DONE)                                                  |
+| 4/26        | Discuss with Alex, make decision on the how to proceed with the baseline. (Tian and Mengjin)                             |
+| 4/27        | Benchmark baseline of Surround360, reading Scanner and Surround360 code  (Tian and Mengjin)                              |
+| 4/29        | Algorithm design and more paper reading (Mengjin); Design the general API of the scheduler (Tian)                        |
+| 5/3         | First version of the Elixir scheduler implementation is done. Benchmark against the original Scanner. (Tian and Mengjin) |
+| 5/7         | Different types of heuristics based optimizations are performed on the scheduler.                                        |
+| 5/9         | The best result is achieved: all optimizations we can think of are performed.                                            |
+| 5/12        | Documentation and Tutorials are done. Benchmarking and evaluations. Final Report.                                        |
+
 
  After 5/12 (What we hope to achieve, or before 5/12 if we finished everything earlier):
 
