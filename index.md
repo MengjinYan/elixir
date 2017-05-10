@@ -1,87 +1,92 @@
-## Project Proposal
+# Elixir - a scheduling framework for video processing pipelines
 
-[Midpoint Report](https://mengjinyan.github.io/elixir/midpoint)
+Elixir is a work scheduling framework for video processing pipelines. It runs on parallel machines with multiple CPU cores and hyperthreads. The main goal of our project is to achieve a speedup, compared against the original scheduler running on [Scanner](https://github.com/scanner-research/scanner).
 
-### Summary
+The code is currently located in the [Surround360](https://github.com/albusshin/Surround360) repository.
 
-We are going to implement a work scheduler library on top of hetrogeneous platforms with CPUs and GPUs. This scheduler will be integrated into [Scanner](https://github.com/scanner-research/scanner)[[^1]], a video analysis framework.
+## Challenges
 
-### Background
+Many researches were conducted on scheduling policies on parallel machines. Given the model, the problem of achieving the optimal performance is NP-Hard[^1]. Hence, the first and biggest challenge for this project was to extract the features of classic video processing applications, and apply the effective and efficient heuristics on the scheduling policies.
 
-As nowadays the video consumers are becoming ubiquitous online, so is the need for a fast video analysis framework. The recent advances in machine learning methods enables many possibilities in this new area. Recent research by CMU on the [Scanner project](https://github.com/scanner-research/scanner)[[^1]] provides such a framework implemented using C++.
+Secondly, a scheduler should also be able to quickly decide which job to run when being asked. The policy should be simple enough, yet efficient for resources usage.
 
-[TensorFlow](https://www.tensorflow.org/)[[^2]] is a open-source machine learning library which provides APIs in a lot of languages including Python, C++ and Go. The design and implementation of TensorFlow is similar to those of Scanner, and TensorFlow provides a much more complex work scheduler than that in Scanner, which enables the possibliity of implementing Scanner on top of Tensorflow.
+Last but not least, the implementation of the scheduler should be efficient while running on parallel machines. The overhead introduced by the scheduler should be as small as possible. This includes using the correct synchronization primitives, using the caches more efficiently, etc..
 
-Nevertheless, implementing Scanner as a whole on top of TensorFlow would require a lot of work and might introduce overhead from TensorFlow. Thus we plan to write a new lightweight work scheduler for Scanner. We plan to utilize the properties of the workload dependency DAGs and hetrogeneous hardware platforms to speedup the work on different video analysis applications implemented on top of Scanner, and improve the performance of the current work scheduler on Scanner.
+## Results with respect to Scanner
 
-### Challenges
+### The Application: Surround360 by Facebook
+We used the [Surround360](https://github.com/albusshin/Surround360) video processing application for the following analysis. The application provides the most complex workflow pipeline amongst all the applications written with Scanner, and the opportunities for parallelism are abundant.
 
-The basic goal of Elixir is to take a pipeline specification of functions with different resource requirements such as CPU and GPU, and map the down to a machine with differnt CPUs and GPUs. This would introduce the following challenges:
+![Surround360 Pipeline](i/data-flow.png "Figure 1 - Surround360 Pipeline")
 
-1. Algorithms: one of the most important challenges we need to solve is to exploit the properties of the given DAG, to find out which parts of the workload pipeline is parallelizable.
-2. Domain specific characteristics: we plan to optimize our scheduler for video analysis workflows, and it is difficult to and analyze some typical video analysis and extract some common key characteristics of the pipeline.
-3. Stability: the workload is dynamic, and to predict and estimate the execution time of a specific piece of work is hard.
-4. Resources: currently, there are not so many Scanner applications we can use to get the pipelines from.
+As shown in Figure 1, the pipeline of Surround360 is consisted of 5 layers of kernels: I, P, F, R and C. The dependencies between the kernels and layers of kernels can be expressed as a DAG: the nodes representing the minimal granularity of jobs that need to be done, and the edges representing the dependencies, or data flows, between the jobs. Our job then, is to operate on the DAG and choose an efficient scheduling policy such that the C kernels (the last layer of the kernels) can be finished as early as possible.
 
-### Resources
+![Dependencies](i/dependency.png "Figure 2 - Dependencies")
 
-1. On the Scanner side of this project, the documentations and open-source code are listed online for our reference. The paper is provided to us to read, and as CMU students, we both can ask for help from the author of Scanner.
-2. For the algorithms of the scheduler, since TensorFlow[[^2]] and Spark[[^3]] are popular open-source frameworks, third-party online information related to TensorFlow about it is plentiful. We can refer to the design of schedulers in both Spark and TensorFlow and introduce the key ideas into our implementation.
+Figure 2 is a subsection of a flatten version of Figure 1. In total, there are 14 of I kernels, 14 of P kernels, 14 of F kernels, 14 of R kernels, and 2 of C kernels. The data flows from I kernels into the whole DAG, and the output is generated by the 2 C kernels. To better understand how the data flows inside the DAG, consider one frame of 14 videos generated by the Facebook Surround360 Camera: the camera has 14 cameras on the side. Each frame generated by the 14 cameras follows into the corresponding I kernels of the pipeline, and then flows into the corresponding P kernel underneath it, to generate a projected spherical frame; and then the projected frame flows into the left and right F kernels underneath it, generating the left and right optical flows, which in turn flow into the R kernels, generating the overlapped regions in the panorama image, which are consumed by the 2 C kernels generating panorama images for both left eye and right eye.
 
-### Goals and Deliverables
+![Camera](i/camera.png "The Camera")
 
-#### Plan to achieve
+One important thing to notice for this workflow is, the workflow of the F kernels is serial. That is, F kernels for a single camera cannot be executed in parallel. This is because there exist dependencies between each layer of the F kernel: a next layer of the F kernel needs to use the output from the previous layer.
 
-The most important goal is to implement a working, fast work scheduler for Scanner. This would include:
+Given this complex workflow pipeline, we optimized our scheduling policy and achieved a reasonable speedup.
 
-1. The evaluation of the performance applications using the original Scanner scheduler as a baseline.
-2. The scheduling algorithm. This is the core of our project.
+### Results
 
-#### Hope to achieve
+We ran our experiments on an AWS c4.8xlarge instance, with 16 cores with hyperthreading (32 vCPUs) and 244GB of Memory.
 
-The following tasks are those that we hope to achieve, if we are ahead of schedule.
+TL;DR: a **6.15x speedup** was achieved when running Surround360 pipeline on our scheduling policy comparing that of Scanner's.
 
-1. Provide a set of interfaces for our scheduler, generalize it as a third-party library with a well-defined set of APIs.
-2. A demo of running a real-time video analysis task if it is feasible.
-3. Generalize and optimize our algorithm for different workflows other than those a video analysis application.
+We introduce 1 baseline and 1 optimal objective here to reference the performance of our scheduler to. We ran a processing job of 20 frames from the video dataset, with each batch (layer) containing 10 frames to process.
 
-#### Evaluation
+#### Baseline: Scanner
 
-To evaluate Elixir, we will do a evaluation of the performance of several applications running on our scheduler and that in the original Scanner scheduler. We will provide graphs and charts for the speedup results.
+The first baseline introduced here is running this pipeline on Scanner.
 
-If we are ahead of schedule, we will implement a simliar application on top of TensorFlow or Spark, and benchmark our implementation against that one.
+Running 20 frames used 715.42 seconds in total, and running the kernels alone (excluding the overheads and loading data from DB) used 689 seconds.
 
-### Platform
+Figure 3 shows how much time each kernel are count for.
 
-We will run our code on top of the platform on which Scanner is implemented. During the process, we plan to do our development and evaluation on the AWS platform.
-
-It makes much sense to implement such a project on top of platforms which have hetrogeneous hardware including multiple CPU or CPU cores and high-end GPU(s).
-
-### Schedule
-
-| Time        | Work before this timestamp                                                                                               |
-| :---------: | :-------------------                                                                                                     |
-| 4/10        | Project Proposal (DONE)                                                                                                  |
-| 4/13        | Investigate Scanner codebase and collect video analysis applications. (DONE)                                             |
-| 4/25        | Basic design of the algorithms and scheduling policies are done. (DONE)                                                  |
-| 4/26        | Discuss with Alex, make decision on the how to proceed with the baseline. (Tian and Mengjin)                             |
-| 4/27        | Benchmark baseline of Surround360, reading Scanner and Surround360 code  (Tian and Mengjin)                              |
-| 4/29        | Algorithm design and more paper reading (Mengjin); Design the general API of the scheduler (Tian)                        |
-| 5/3         | First version of the Elixir scheduler implementation is done. Benchmark against the original Scanner. (Tian and Mengjin) |
-| 5/7         | Different types of heuristics based optimizations are performed on the scheduler.                                        |
-| 5/9         | The best result is achieved: all optimizations we can think of are performed.                                            |
-| 5/12        | Documentation and Tutorials are done. Benchmarking and evaluations. Final Report.                                        |
+![Scanner Baseline](i/fused4.png "Figure 3 - Scanner baseline")
 
 
- After 5/12 (What we hope to achieve, or before 5/12 if we finished everything earlier):
+#### Objective: Scanner with hand-tuned scheduling policy
 
- - Application implementation on TensorFlow or Spark, benchmarking against our scheduler.
- - Real-time video analysis using a simple application such as face detection.
+The second baseline is running this pipeline with hand-tuned scheduling policy. We feed Scanner the jobs to run based on our pre-known knowledge about the graph, in a fashion that it can achieve the optimal performance.
+
+Running 20 frames used 144.26 seconds in total, and running the kernels alone (excluding the overheads and loading data from DB) used 114 seconds.
+
+Figure 4 shows how much time each kernel are count for.
+
+![Objective](i/fused3.png "Figure 4 - Objective")
+
+#### Elixir Results
+
+The results we achieved on running the kernels on Elixir achieved the following results.
+
+Running 20 frames used 126 seconds in total, and running the kernels alone (excluding the I kernels running time) used 112 seconds.
+
+Figure 5 shows how much time each kernel are count for.
+
+![Elixir Results](i/elixir-20.png "Figure 5 - Elixir Results")
+
+This achieved a **689 / 112 = 6.15x speedup**
+
+##### Speedup explained
+
+The first reason of achieving this speedup is utilizing the fact that there are a lot of parallelism opportunities in this workflow pipeline.
+
+Secondly, as we can see from the figures above, the F kernels are always using up most of the time for doing the computations, and it is the serialized part of the whole pipeline. According to Amdahl's law, the best case we can achieve is to use the computation time for F kernels to hide all the computation time spent in the other kernels, which is exactly what we did according to our scheduling policy.
+
+### Design and implementation
+
+![System Design](i/system-design.png "System design of Elixir")
+
+The system design and control flow of the Elixir scheduling framework is shown in Figure 6 and 7. The design and implementation will be discussed in more details in the final project report.
+
+![Control Flow](i/control-flow.png "Control Flow of Elixir")
 
 ### References
 
-[^1]: [The Scanner Project](https://github.com/scanner-research/scanner)
+[^1]: Kwok, Yu-Kwong, and Ishfaq Ahmad. "Static scheduling algorithms for allocating directed task graphs to multiprocessors." ACM Computing Surveys (CSUR) 31.4 (1999): 406-471.
 
-[^2]: Abadi, Martín, et al. "TensorFlow: A system for large-scale machine learning." Proceedings of the 12th USENIX Symposium on Operating Systems Design and Implementation (OSDI). Savannah, Georgia, USA. 2016.
-
-[^3]: Zaharia, Matei, et al. "Spark: Cluster Computing with Working Sets." HotCloud 10.10-10 (2010): 95.
