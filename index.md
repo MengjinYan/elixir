@@ -45,7 +45,7 @@ Running 20 frames used 715.42 seconds in total, and running the kernels alone (e
 
 The following figure shows how much time each kernel are count for.
 
-<img src="i/fused-4.png" width="450" alt="Scanner Baseline" />
+<img src="i/fused-4.png" alt="Scanner Baseline" />
 
 #### Objective: Scanner with hand-tuned scheduling policy
 
@@ -55,7 +55,7 @@ Running 20 frames used 144.26 seconds in total, and running the kernels alone (e
 
 The following figure shows how much time each kernel are count for.
 
-<img src="i/fused-3.png" width="450" alt="Goal" />
+<img src="i/fused-3.png" alt="Goal" />
 
 #### Elixir Results
 
@@ -65,7 +65,7 @@ Running 20 frames used 126 seconds in total, and running the kernels alone (excl
 
 Figure 5 shows how much time each kernel are count for.
 
-<img src="i/elixir-20.png" width="450" alt="Elixir Results" />
+<img src="i/elixir-20.png" alt="Elixir Results" />
 
 This achieved a **689 / 112 = 6.15x speedup**
 
@@ -77,11 +77,11 @@ Secondly, as we can see from the figures above, the F kernels are always using u
 
 ### Design and implementation
 
-<img src="i/system-design.png" width="450" alt="System Design" />
+<img src="i/system-design.png" alt="System Design" />
 
 The system design and control flow of the Elixir scheduling framework is shown in Figure 6 and 7. The design and implementation will be discussed in more details in the final project report.
 
-<img src="i/control-flow.png" width="450" alt="Control Flow" />
+<img src="i/control-flow.png" alt="Control Flow" />
 
 ### References
 
