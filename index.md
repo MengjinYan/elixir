@@ -79,9 +79,15 @@ Secondly, as we can see from the figures above, the F kernels are always using u
 
 <img src="i/system-design.png" alt="System Design" />
 
-The system design and control flow of the Elixir scheduling framework is shown in Figure 6 and 7. The design and implementation will be discussed in more details in the final project report.
+The system design of our scheduler is shown in the figure above.
+
+First and foremost, there is this Graph which represents the dependencies between the jobs of each nodes in the Graph. Then there's the worker threads, which asks for jobs from the job queue. The job queue can be seen as a priority queue, which we'll discuss about later.
+
+The data list is for storing temporary results produced by the workers. When all of the children dependencies of a node are met, then the output of that node will be deleted from the data list, since no other jobs will be using this data.
 
 <img src="i/control-flow.png" alt="Control Flow" />
+
+As we can see, the design of the control flow is straightforward and pretty self-explanatory. As such, we would like to emphasize the point of how to extract the jobs from the job queue: as mentioned above, each job in the job queue is a node with a priority, and this priority will be re-computed each time a worker needs to get a piece of work out of the queue. The policy of how to extract this job is introduced below.
 
 ### References
 
