@@ -210,7 +210,7 @@ Figure 5 shows how much time each kernel are count for.
 
 This achieved a **689 / 112 = 6.15x speedup**
 
-##### Speedup explained
+#### Speedup explained
 
 The first reason of achieving this speedup is utilizing the fact that there are 
 a lot of parallelism opportunities in this workflow pipeline.
