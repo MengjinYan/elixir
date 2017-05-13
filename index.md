@@ -222,11 +222,10 @@ to use the computation time for F kernels to hide all the computation time spent
 in the other kernels, which is exactly what we did according to our scheduling 
 policy.
 
-## References
-
-[^1]: Kwok, Yu-Kwong, and Ishfaq Ahmad. "Static scheduling algorithms for allocating directed task graphs to multiprocessors." ACM Computing Surveys (CSUR) 31.4 (1999): 406-471.
-
-
 ## List of Work by Each Student
 
 Equal work was performed by both project members.
+
+## References
+
+[^1]: Kwok, Yu-Kwong, and Ishfaq Ahmad. "Static scheduling algorithms for allocating directed task graphs to multiprocessors." ACM Computing Surveys (CSUR) 31.4 (1999): 406-471.
