@@ -69,7 +69,7 @@ state of graph as well as the system is updated and new runnable jobs will be
 put into the runnable job queue. Below is the detailed control flow of our worker 
 threads.
 
-<img src="i/control-flow.png" width="450" alt="Control Flow" />
+<img src="i/control-flow.png" width="600" alt="Control Flow" />
 
 
 ### Scheduling Policies
