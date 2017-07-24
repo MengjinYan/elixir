@@ -1,4 +1,4 @@
-## Summery
+## Summary
 
 Elixir is a scheduling framework for video processing pipelines. It runs on 
 parallel machines with multiple CPU cores and hyperthreads. The main goal of our 
